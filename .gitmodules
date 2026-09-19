@@ -1,7 +1,0 @@
-[submodule "backend"]
-	path = backend
-	url = https://github.com/jaheimpink77/realWorld-DjangoRestFramework.git
-
-[submodule "frontend"]
-	path = frontend
-	url = https://github.com/jaheimpink77/react-vite-realworld-example-app.git
