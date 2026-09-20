@@ -33,6 +33,6 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "faker": "^5.5.3",
     "miragejs": "^0.1.41",
-    "vite": "^2.3.8"
+    "vite": "^2.9.18"
   }
 }
