@@ -3,4 +3,4 @@ An ECS + RDS deployment for a Medium.com clone. The frontend code is from [roman
 
 ## Architecture Diagram
 
-[Architecture Diagram](ecs-rds-deployment-architecture-diagram.drawio.png)
+![Architecture Diagram](ecs-rds-deployment-architecture-diagram.drawio.png)
