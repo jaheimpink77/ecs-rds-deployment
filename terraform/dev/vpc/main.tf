@@ -2,7 +2,7 @@ module "vpc" {
   source = "../../modules/vpc"
 
   vpc_cidr_block = "10.0.0.0/16"
-  vpc_name       = "ecs-rd-deployment"
+  vpc_name       = "ecs-rds-deployment"
   subnet_config = {
     public_subnet_1 = {
       cidr_block        = "10.0.1.0/24"
