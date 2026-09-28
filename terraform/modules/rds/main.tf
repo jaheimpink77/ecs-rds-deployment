@@ -6,7 +6,7 @@ resource "aws_db_subnet_group" "database_subnet_group" {
 
 resource "aws_security_group" "rds" {
   name_prefix = "${var.name}-rds-"
-  vpc_id = data.terraform_remote_state.vpc.vpc_id
+  vpc_id = data.terraform_remote_state.vpc.outputs.vpc_id
 }
 
 resource "aws_vpc_security_group_ingress_rule" "from_app" {
