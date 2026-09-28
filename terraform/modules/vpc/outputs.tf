@@ -13,3 +13,7 @@ output "private_subnet_ids" {
     for name in key(local.private_subnets) : aws_subnet.aws_vpc.ecs_rds_deployment[name].id
   ]
 }
+
+output "cidr_block" {
+  value = aws_vpc.ecs_rds_deployment.cidr_block
+}

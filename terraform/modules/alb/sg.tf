@@ -32,7 +32,7 @@ resource "aws_security_group_rule" "lb_http_egress" {
   protocol = "TCP"
   description = var.http_egress_description
   security_group_id = aws_security_group.lb_sg.id
-  cidr_blocks = var.http_egress_cidr_blocks
+  cidr_blocks = [data.terraform_remote_state.vpc.outputs.cidr_block]
 }
 
 resource "aws_security_group_rule" "lb_https_egress" {
@@ -42,6 +42,6 @@ resource "aws_security_group_rule" "lb_https_egress" {
   protocol = "TCP"
   description = var.https_egress_description
   security_group_id = aws_security_group.lb_sg.id
-  cidr_blocks = var.https_egress_cidr_blocks
+  cidr_blocks = [data.terraform_remote_state.vpc.outputs.cidr_block]
 }
 

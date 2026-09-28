@@ -8,7 +8,7 @@ resource "aws_lb" "ecs_rds_deployment" {
 
 resource "aws_lb_target_group" "http" {
   name = var.http_lb_tg_name
-  port = 80
+  port = 8000
   protocol = "HTTP"
   target_type = "ip"
   vpc_id = data.terraform_remote_state.vpc.outputs.vpc_id
