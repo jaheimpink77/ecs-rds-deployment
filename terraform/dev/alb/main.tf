@@ -8,7 +8,7 @@ module "alb" {
   http_lb_tg_name = "http"
   http_tg_healthy_threshold = 2
   http_tg_unhealthy_threshold = 2
-  http_timeout = 10
+  http_timeout = 5
   http_interval = 10
   https_ingress_from_port = 443
   https_ingress_to_port = 443
