@@ -26,7 +26,7 @@ export default defineConfig({
   // the built app behaves like the dev server instead of 404ing on /api.
   preview: {
     host: true,
-    port: 3000,
+    port: 8080,
     proxy,
   },
 })
