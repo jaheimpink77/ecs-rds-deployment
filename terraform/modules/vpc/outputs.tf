@@ -4,13 +4,13 @@ output "vpc_id" {
 
 output "public_subnet_ids" {
   value = [
-    for name in key(local.public_subnets) : aws_subnet.ecs_rds_deployment[name].id
+    for name in keys(local.public_subnets) : aws_subnet.ecs_rds_deployment[name].id
   ]
 }
 
 output "private_subnet_ids" {
   value = [
-    for name in key(local.private_subnets) : aws_subnet.ecs_rds_deployment[name].id
+    for name in keys(local.private_subnets) : aws_subnet.ecs_rds_deployment[name].id
   ]
 }
 
