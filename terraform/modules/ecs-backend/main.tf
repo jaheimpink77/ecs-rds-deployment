@@ -12,7 +12,7 @@ resource "aws_ecs_task_definition" "this" {
   execution_role_arn = aws_iam_role.execution.arn
   task_role_arn = aws_iam_role.task.arn
 
-  container_definitions = jsondecode([{
+  container_definitions = jsonencode([{
     name = var.container_name
     image = local.image
     essential = true
@@ -64,7 +64,7 @@ resource "aws_ecs_service" "this" {
     service {
       port_name = var.container_name
       discovery_name = "backend"
-      
+
     }
   }
 }
