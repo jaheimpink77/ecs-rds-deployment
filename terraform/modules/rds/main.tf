@@ -9,9 +9,9 @@ resource "aws_security_group" "rds" {
   vpc_id = data.terraform_remote_state.vpc.outputs.vpc_id
 }
 
-resource "aws_vpc_security_group_ingress_rule" "from_app" {
+resource "aws_vpc_security_group_ingress_rule" "from_backend" {
   security_group_id = aws_security_group.rds.id
-  referenced_security_group_id = data.terraform_remote_state.app_sg.outputs.sg_id
+  referenced_security_group_id = data.terraform_remote_state.backend_sg.outputs.sg_id
   ip_protocol = "tcp"
   from_port = 5432
   to_port = 5432

@@ -8,12 +8,12 @@ data "terraform_remote_state" "vpc" {
   }
 }
 
-data "terraform_remote_state" "app_sg" {
+data "terraform_remote_state" "backend_sg" {
   backend = "s3"
 
   config = {
     bucket = "ecs-rds-deployment-remote-state-210450948513-eu-west-2-an"
-    key = "dev/app-sg"
+    key = "dev/backend-sg"
     region = "eu-west-2"
   }
 }
