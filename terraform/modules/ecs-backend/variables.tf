@@ -29,7 +29,7 @@ variable "memory" {
 }
 
 variable "desired_count" {
-  description = "Number of instances of teh backend task definition"
+  description = "Number of instances of the backend task definition"
   type = string
 }
 
