@@ -1,3 +1,3 @@
-output "repository_url" {
-  value = module.ecr.repository_url
+output "repository_urls" {
+  value = { for key, mod in module.ecr : key => mod.repository_url}
 }
