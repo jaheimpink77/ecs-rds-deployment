@@ -9,3 +9,7 @@ output "endpoint" {
 output "db_name" {
   value = module.rds.db_name
 }
+
+output "db_identifier" {
+  value = module.rds.db_identifier
+}
