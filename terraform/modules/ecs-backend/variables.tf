@@ -20,17 +20,17 @@ variable "image_tag" {
 
 variable "cpu" {
   description = "Amount of CPU to assign to the backend task"
-  type = string
+  type = number
 }
 
 variable "memory" {
   description = "Amount of memory to assign to the backend task"
-  type = string
+  type = number
 }
 
 variable "desired_count" {
   description = "Number of instances of the backend task definition"
-  type = string
+  type = number
 }
 
 variable "log_retention_days" {

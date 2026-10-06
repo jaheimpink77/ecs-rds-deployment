@@ -11,7 +11,7 @@ data "terraform_remote_state" "ecr" {
   backend = "s3"
   config = {
     bucket = "ecs-rds-deployment-remote-state-210450948513-eu-west-2-an"
-    key = "dev/vpc"
+    key = "dev/ecr"
     region = "eu-west-2"
   }
 }
@@ -29,7 +29,7 @@ data "terraform_remote_state" "frontend_sg" {
   backend = "s3"
   config = {
     bucket = "ecs-rds-deployment-remote-state-210450948513-eu-west-2-an"
-    key = "dev/frotnend_sg"
+    key = "dev/frontend-sg"
     region = "eu-west-2"
   }
 }

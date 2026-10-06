@@ -1,5 +1,5 @@
 module "ecs_cluster" {
   source = "../../modules/ecs-cluster"
 
-  cluster_name = "ecs-rds-deplyment"
+  cluster_name = "ecs-rds-deployment"
 }

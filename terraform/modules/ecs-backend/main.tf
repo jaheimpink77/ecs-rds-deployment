@@ -26,6 +26,7 @@ resource "aws_ecs_task_definition" "this" {
     environment = [
       { name = "DB_HOST", value = data.terraform_remote_state.rds.outputs.endpoint},
       { name = "DB_NAME", value = var.db_name},
+      { name = "ALLOWED_HOSTS", value = "localhost,127.0.0.1,backend,${data.terraform_remote_state.alb.outputs.lb_dns_name}" },
     ]
 
     secrets = [
@@ -40,6 +41,14 @@ resource "aws_ecs_task_definition" "this" {
         awslogs-region = data.aws_region.current.name
         awslogs-stream-prefix = var.name
       }
+    }
+
+    healthCheck = {
+      command = ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.open('http://localhost:8000/api/health')\" || exit 1"]
+      interval = 30
+      timeout = 5
+      retries = 3
+      startPeriod = 60
     }
   }])
 }
@@ -66,5 +75,10 @@ resource "aws_ecs_service" "this" {
       discovery_name = "backend"
 
     }
+  }
+
+  deployment_circuit_breaker {
+    enable = true
+    rollback = true
   }
 }

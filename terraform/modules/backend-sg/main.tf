@@ -22,7 +22,7 @@ resource "aws_vpc_security_group_egress_rule" "https_out" {
 
 resource "aws_vpc_security_group_egress_rule" "postgres_out" {
   security_group_id = aws_security_group.backend.id
-  cidr_ipv4 = data.terraform_remote_state.vpc.outputs.cidr_block
+  cidr_ipv4 = data.terraform_remote_state.vpc.outputs.vpc_cidr_block
   ip_protocol = "tcp"
   from_port = 5432
   to_port = 5432

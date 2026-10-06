@@ -1,5 +1,5 @@
 output "task_execution_role_arn" {
-  value = aws_iam_role.task.arn
+  value = aws_iam_role.execution.arn
 }
 
 output "service_name" {

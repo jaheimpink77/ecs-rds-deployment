@@ -34,5 +34,5 @@ resource "aws_iam_role_policy" "execution_secrets" {
 
 resource "aws_iam_role" "task" {
   name = "${var.name}-task-role"
-  assume_role_policy = data.aws_iam_policy_document.ecs_assume_role
+  assume_role_policy = data.aws_iam_policy_document.ecs_assume_role.json
 }

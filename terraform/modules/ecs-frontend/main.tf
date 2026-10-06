@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_log_group" "this" {
-  name = "ecs/${var.name}"
+  name = "/ecs/${var.name}"
   retention_in_days = var.log_retention_days
 }
 
@@ -10,14 +10,14 @@ resource "aws_ecs_task_definition" "this" {
   cpu = var.cpu
   memory = var.memory
   execution_role_arn = aws_iam_role.execution.arn
-  task_role_arn = aws_iam_role.execution.arn
+  task_role_arn = aws_iam_role.task.arn
 
   container_definitions = jsonencode([{
     name = var.container_name
     image = local.image
     essential = true
 
-    port_mappings = [{
+    portMappings = [{
         name = var.container_name
         containerPort = var.frontend_port
         protocol = "tcp"
@@ -32,7 +32,7 @@ resource "aws_ecs_task_definition" "this" {
         options = {
             awslogs-group = aws_cloudwatch_log_group.this.name
             awslogs-region = data.aws_region.current.name
-            awslogs-prefix = var.name
+            awslogs-stream-prefix = var.name
         }
     }
   }])
@@ -48,7 +48,7 @@ resource "aws_ecs_service" "this" {
   health_check_grace_period_seconds = var.health_check_grace_period_seconds
 
   network_configuration {
-    subnets = data.terraform_remote_state.alb.outputs.target_group_arn
+    subnets = data.terraform_remote_state.alb.outputs.private_subnet_ids
     security_groups = [data.terraform_remote_state.frontend_sg.outputs.sg_id]
     assign_public_ip = false
   }

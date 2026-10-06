@@ -5,3 +5,7 @@ output "secret_arn" {
 output "endpoint" {
   value = module.rds.endpoint
 }
+
+output "db_name" {
+  value = module.rds.db_name
+}

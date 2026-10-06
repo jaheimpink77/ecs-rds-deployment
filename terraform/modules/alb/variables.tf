@@ -118,16 +118,6 @@ variable "https_ingress_cidr_blocks" {
   type = list(string)
 }
 
-variable "http_egress_cidr_blocks" {
-  description = "CIDR blocks for http egress sg rule"
-  type = list(string)
-}
-
-variable "https_egress_cidr_blocks" {
-  description = "CIDR blocks for https egress sg rule"
-  type = list(string)
-}
-
 variable "lb_sg_name" {
   description = "Name of the lb sg"
   type = string

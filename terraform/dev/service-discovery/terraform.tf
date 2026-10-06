@@ -10,7 +10,7 @@ terraform {
 
   backend "s3" {
     bucket = "ecs-rds-deployment-remote-state-210450948513-eu-west-2-an"
-    key = "dev/rds"
+    key = "dev/service-discovery"
     region = "eu-west-2"
   }
 }
