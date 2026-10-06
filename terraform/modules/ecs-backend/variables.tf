@@ -37,8 +37,3 @@ variable "log_retention_days" {
   description = "Number of days to retain logs in cloudwatch"
   type = number
 }
-
-variable "db_name" {
-  description = "Name of the DB that the backend task will communicate with"
-  type = string
-}

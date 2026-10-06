@@ -47,7 +47,7 @@ data "terraform_remote_state" "ecs_cluster" {
   backend = "s3"
   config = {
     bucket = "ecs-rds-deployment-remote-state-210450948513-eu-west-2-an"
-    key = "dev/ecs_cluster"
+    key = "dev/ecs-cluster"
     region = "eu-west-2"
   }
 }

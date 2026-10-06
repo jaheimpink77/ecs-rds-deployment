@@ -48,7 +48,7 @@ resource "aws_ecs_service" "this" {
   health_check_grace_period_seconds = var.health_check_grace_period_seconds
 
   network_configuration {
-    subnets = data.terraform_remote_state.alb.outputs.private_subnet_ids
+    subnets = data.terraform_remote_state.vpc.outputs.private_subnet_ids
     security_groups = [data.terraform_remote_state.frontend_sg.outputs.sg_id]
     assign_public_ip = false
   }

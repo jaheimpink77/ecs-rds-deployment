@@ -9,5 +9,4 @@ module "ecs_backend" {
   memory = 512
   desired_count = 1
   log_retention_days = 7
-  db_name = data.terraform_remote_state.rds.db_name
 }

@@ -25,7 +25,7 @@ resource "aws_ecs_task_definition" "this" {
 
     environment = [
       { name = "DB_HOST", value = data.terraform_remote_state.rds.outputs.endpoint},
-      { name = "DB_NAME", value = var.db_name},
+      { name = "DB_NAME", value = data.terraform_remote_state.rds.outputs.db_name},
       { name = "ALLOWED_HOSTS", value = "localhost,127.0.0.1,backend,${data.terraform_remote_state.alb.outputs.lb_dns_name}" },
     ]
 
@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "this" {
     }
 
     healthCheck = {
-      command = ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.open('http://localhost:8000/api/health')\" || exit 1"]
+      command = ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')\" || exit 1"]
       interval = 30
       timeout = 5
       retries = 3
