@@ -18,8 +18,8 @@ resource "aws_cloudwatch_metric_alarm" "ecs_cpu" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   treat_missing_data = "notBreaching"
 
-  alarm_actions = [aws_sns_topic.alerts]
-  ok_actions = [aws_sns_topic.alerts]
+  alarm_actions = [aws_sns_topic.alerts.arn]
+  ok_actions = [aws_sns_topic.alerts.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "ecs_memory" {

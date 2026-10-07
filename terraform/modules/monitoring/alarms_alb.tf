@@ -1,4 +1,4 @@
-resource "aws_cloudwatch_metric_alarm" "alb_target_5xx" {
+resource "aws_cloudwatch_metric_alarm" "alb_frontend_target_5xx" {
   alarm_name = "${var.name}-alb-target-5xx"
   alarm_description = "Frontend (nginx) targets returning 5xx, including proxied backend errors"
 
@@ -23,7 +23,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_5xx" {
   alarm_name = "${var.name}-alb-5xx"
   alarm_description = "ALB itself returning 5xx"
 
-  namespace = "AWS/Application"
+  namespace = "AWS/ApplicationELB"
   metric_name = "HTTPCode_ELB_5XX_Count"
   dimensions = {
     LoadBalancer = local.lb_suffix
@@ -44,19 +44,19 @@ resource "aws_cloudwatch_metric_alarm" "alb_unhealthy_hosts" {
   alarm_name = "${var.name}-alb-unhealthy-hosts"
   alarm_description = "ALB target group's unhealthy hosts"
 
-  namespace = "AWS/Application"
-  metric_name = "UnHealthyHostCount"
+  namespace = "AWS/ApplicationELB"
+  metric_name = "HealthyHostCount"
   dimensions = {
     LoadBalancer = local.lb_suffix
     TargetGroup = local.tg_suffix
   }
 
-  statistic = "Maximum"
+  statistic = "Minimum"
   period = 60
   evaluation_periods = 2
   threshold = 1 
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  treat_missing_data = "notBreaching"
+  treat_missing_data = "Breaching"
 
   alarm_actions = [aws_sns_topic.alerts.arn]
   ok_actions = [aws_sns_topic.alerts.arn]
@@ -66,7 +66,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_no_hosts_healthy" {
   alarm_name = "${var.name}-alb-no-hosts-healthy"
   alarm_description = "ALB target group has no hosts healthy"
 
-  namespace = "AWS/Application"
+  namespace = "AWS/ApplicationELB"
   metric_name = "UnHealthyHostCount"
   dimensions = {
     LoadBalancer = local.lb_suffix
@@ -86,9 +86,9 @@ resource "aws_cloudwatch_metric_alarm" "alb_no_hosts_healthy" {
 
 resource "aws_cloudwatch_metric_alarm" "alb_p95_latency" {
   alarm_name = "${var.name}-alb-p95-latency"
-  alarm_description = "p95 target response time above 2s for 15 min (frontend targets, include proxied /api calls)"
+  alarm_description = "p95 target response time above 2s for 15 min (frontend targets, includes proxied /api calls)"
 
-  namespace = "AWS/Application"
+  namespace = "AWS/ApplicationELB"
   metric_name = "TargetResponseTime"
   dimensions = {
     LoadBalancer = local.lb_suffix
@@ -98,7 +98,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_p95_latency" {
   period = 300
   evaluation_periods = 3
   threshold = 2
-  comparison_operator = "LessThanThreshold"
+  comparison_operator = "GreaterThanThreshold"
   treat_missing_data = "notBreaching"
 
   alarm_actions = [aws_sns_topic.alerts.arn]

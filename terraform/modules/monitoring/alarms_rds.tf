@@ -15,13 +15,13 @@ resource "aws_cloudwatch_metric_alarm" "rds_cpu" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   treat_missing_data = "notBreaching"
 
-  alarm_actions = [aws_sns_topic.alerts]
-  ok_actions = [aws_sns_topic.alerts]
+  alarm_actions = [aws_sns_topic.alerts.arn]
+  ok_actions = [aws_sns_topic.alerts.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "rds_free_storage" {
-  alarm_name = "${var.name}-rds-free-stroage-low"
-  alarm_description = "RDS free storage below 3 GiB"
+  alarm_name = "${var.name}-rds-free-storage-low"
+  alarm_description = "RDS free storage below 2 GiB"
 
   namespace = "AWS/RDS"
   metric_name = "FreeStorageSpace"

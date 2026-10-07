@@ -1,5 +1,5 @@
 variable "name" {
-  description = "Name of resources created with the minotring module"
+  description = "Name of resources created with the monitoring module"
   type = string
 }
 

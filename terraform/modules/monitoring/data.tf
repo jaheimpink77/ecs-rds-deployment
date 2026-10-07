@@ -18,7 +18,7 @@ data "terraform_remote_state" "rds" {
   }
 }
 
-data "terraform_remote_state" "ecs-cluster" {
+data "terraform_remote_state" "ecs_cluster" {
   backend = "s3"
 
   config = {
@@ -28,7 +28,7 @@ data "terraform_remote_state" "ecs-cluster" {
   }
 }
 
-data "terraform_remote_state" "ecs-backend" {
+data "terraform_remote_state" "ecs_backend" {
   backend = "s3"
 
   config = {
@@ -38,7 +38,7 @@ data "terraform_remote_state" "ecs-backend" {
   }
 }
 
-data "terraform_remote_state" "ecs-frontend" {
+data "terraform_remote_state" "ecs_frontend" {
   backend = "s3"
 
   config = {
