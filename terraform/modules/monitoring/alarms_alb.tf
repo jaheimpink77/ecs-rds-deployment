@@ -45,18 +45,18 @@ resource "aws_cloudwatch_metric_alarm" "alb_unhealthy_hosts" {
   alarm_description = "ALB target group's unhealthy hosts"
 
   namespace = "AWS/ApplicationELB"
-  metric_name = "HealthyHostCount"
+  metric_name = "UnHealthyHostCount"
   dimensions = {
     LoadBalancer = local.lb_suffix
     TargetGroup = local.tg_suffix
   }
 
-  statistic = "Minimum"
+  statistic = "Maximum"
   period = 60
   evaluation_periods = 2
   threshold = 1 
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  treat_missing_data = "Breaching"
+  treat_missing_data = "notBreaching"
 
   alarm_actions = [aws_sns_topic.alerts.arn]
   ok_actions = [aws_sns_topic.alerts.arn]
@@ -67,13 +67,13 @@ resource "aws_cloudwatch_metric_alarm" "alb_no_hosts_healthy" {
   alarm_description = "ALB target group has no hosts healthy"
 
   namespace = "AWS/ApplicationELB"
-  metric_name = "UnHealthyHostCount"
+  metric_name = "HealthyHostCount"
   dimensions = {
     LoadBalancer = local.lb_suffix
     TargetGroup = local.tg_suffix
   }
 
-  statistic = "Maximum"
+  statistic = "Minimum"
   period = 60
   evaluation_periods = 2
   threshold = 1 
