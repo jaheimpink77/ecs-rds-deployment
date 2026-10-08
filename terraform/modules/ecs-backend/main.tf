@@ -74,6 +74,10 @@ resource "aws_ecs_service" "this" {
       port_name = var.container_name
       discovery_name = "backend"
 
+      client_alias {
+        port = var.backend_port
+        dns_name = "backend"
+      }
     }
   }
 
