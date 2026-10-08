@@ -175,3 +175,15 @@ STORAGES = {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
     },
 }
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "plain": {"format": "%(levelname)s %(names)s %(messages)s"},
+    },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "foramtter": "plain"},
+    },
+    "root": {"handlers": ["console"], "level": "INFO"},
+}
