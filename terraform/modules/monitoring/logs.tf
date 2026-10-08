@@ -10,9 +10,9 @@ resource "aws_cloudwatch_log_metric_filter" "backend_errors" {
   }
 }
 
-resource "aws_cloudwatch_metric_filter" "backend_errors" {
-    name = "${var.name}-backend-errors"
-    alarm_description = "Backend logged 3 or more erros/tracebacks in 5 min"
+resource "aws_cloudwatch_metric_alarm" "backend_errors" {
+    alarm_name = "${var.name}-backend-errors"
+    alarm_description = "Backend logged 3 or more errors/tracebacks in 5 min"
 
     namespace = "${var.name}/Application"
     metric_name = "BackendErrorCount"
@@ -24,6 +24,6 @@ resource "aws_cloudwatch_metric_filter" "backend_errors" {
     comparison_operator = "GreaterThanOrEqualToThreshold"
     treat_missing_data = "notBreaching"
 
-    alarm_action = [aws_sns_topic.alerts.arn]
+    alarm_actions = [aws_sns_topic.alerts.arn]
     ok_actions = [aws_sns_topic.alerts.arn]
 }
