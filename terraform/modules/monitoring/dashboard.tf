@@ -17,8 +17,8 @@ resource "aws_cloudwatch_dashboard" "this" {
                     aws_cloudwatch_metric_alarm.rds_connections.arn,
                     aws_cloudwatch_metric_alarm.rds_cpu.arn,
                     aws_cloudwatch_metric_alarm.rds_free_memory.arn,
-                    aws_cloudwatch_metric_alarm.rds_free_storage,
-                    aws_cloudwatch_metric_alarm.backend_errors,
+                    aws_cloudwatch_metric_alarm.rds_free_storage.arn,
+                    aws_cloudwatch_metric_alarm.backend_errors.arn,
                   ],
                   [for a in aws_cloudwatch_metric_alarm.ecs_cpu : a.arn],
                   [for a in aws_cloudwatch_metric_alarm.ecs_memory : a.arn],
@@ -83,7 +83,7 @@ resource "aws_cloudwatch_dashboard" "this" {
                 period = 300
                 metrics = [
                     for name, svc in local.ecs_services :
-                    ["AWS/ECS", "MemoryUtilization", "ClusterName", local.cluster_name, "ServiceName", svc, { stat = "average", label = name}]
+                    ["AWS/ECS", "MemoryUtilization", "ClusterName", local.cluster_name, "ServiceName", svc, { stat = "Average", label = name}]
                 ]
                 annotations = {
                     horizontal = [{ label = "Alarm threshold", value = 80 }]
