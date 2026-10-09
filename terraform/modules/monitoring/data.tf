@@ -3,7 +3,7 @@ data "terraform_remote_state" "alb" {
 
   config = {
     bucket = "ecs-rds-deployment-remote-state-210450948513-eu-west-2-an"
-    key = "dev/alb"
+    key    = "dev/alb"
     region = "eu-west-2"
   }
 }
@@ -13,7 +13,7 @@ data "terraform_remote_state" "rds" {
 
   config = {
     bucket = "ecs-rds-deployment-remote-state-210450948513-eu-west-2-an"
-    key = "dev/rds"
+    key    = "dev/rds"
     region = "eu-west-2"
   }
 }
@@ -23,7 +23,7 @@ data "terraform_remote_state" "ecs_cluster" {
 
   config = {
     bucket = "ecs-rds-deployment-remote-state-210450948513-eu-west-2-an"
-    key = "dev/ecs-cluster"
+    key    = "dev/ecs-cluster"
     region = "eu-west-2"
   }
 }
@@ -33,7 +33,7 @@ data "terraform_remote_state" "ecs_backend" {
 
   config = {
     bucket = "ecs-rds-deployment-remote-state-210450948513-eu-west-2-an"
-    key = "dev/ecs-backend"
+    key    = "dev/ecs-backend"
     region = "eu-west-2"
   }
 }
@@ -43,7 +43,7 @@ data "terraform_remote_state" "ecs_frontend" {
 
   config = {
     bucket = "ecs-rds-deployment-remote-state-210450948513-eu-west-2-an"
-    key = "dev/ecs-frontend"
+    key    = "dev/ecs-frontend"
     region = "eu-west-2"
   }
 }

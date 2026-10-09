@@ -4,18 +4,18 @@ resource "aws_sns_topic" "alerts" {
 
 resource "aws_sns_topic_subscription" "email" {
   topic_arn = aws_sns_topic.alerts.arn
-  protocol = "email"
-  endpoint = var.alert_email
+  protocol  = "email"
+  endpoint  = var.alert_email
 }
 
 data "aws_iam_policy_document" "alerts" {
   statement {
-    sid = "AllowCloudWatchAndEventBridgePublish"
-    effect = "Allow"
+    sid     = "AllowCloudWatchAndEventBridgePublish"
+    effect  = "Allow"
     actions = ["sns:Publish"]
 
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = ["cloudwatch.amazonaws.com", "events.amazonaws.com"]
     }
 
@@ -24,7 +24,7 @@ data "aws_iam_policy_document" "alerts" {
 }
 
 resource "aws_sns_topic_policy" "alerts" {
-    arn = aws_sns_topic.alerts.arn
-    policy = data.aws_iam_policy_document.alerts.json
+  arn    = aws_sns_topic.alerts.arn
+  policy = data.aws_iam_policy_document.alerts.json
 }
 

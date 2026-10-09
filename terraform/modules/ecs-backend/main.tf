@@ -1,88 +1,88 @@
 resource "aws_cloudwatch_log_group" "this" {
-  name = "/ecs/${var.name}"
+  name              = "/ecs/${var.name}"
   retention_in_days = var.log_retention_days
 }
 
 resource "aws_ecs_task_definition" "this" {
-  family = var.name
+  family                   = var.name
   requires_compatibilities = ["FARGATE"]
-  network_mode = "awsvpc"
-  cpu = var.cpu
-  memory = var.memory
-  execution_role_arn = aws_iam_role.execution.arn
-  task_role_arn = aws_iam_role.task.arn
+  network_mode             = "awsvpc"
+  cpu                      = var.cpu
+  memory                   = var.memory
+  execution_role_arn       = aws_iam_role.execution.arn
+  task_role_arn            = aws_iam_role.task.arn
 
   container_definitions = jsonencode([{
-    name = var.container_name
-    image = local.image
+    name      = var.container_name
+    image     = local.image
     essential = true
 
     portMappings = [{
-      name = var.container_name
+      name          = var.container_name
       containerPort = var.backend_port
-      protocol = "tcp"
+      protocol      = "tcp"
     }]
 
     environment = [
-      { name = "DB_HOST", value = data.terraform_remote_state.rds.outputs.endpoint},
-      { name = "DB_NAME", value = data.terraform_remote_state.rds.outputs.db_name},
+      { name = "DB_HOST", value = data.terraform_remote_state.rds.outputs.endpoint },
+      { name = "DB_NAME", value = data.terraform_remote_state.rds.outputs.db_name },
       { name = "ALLOWED_HOSTS", value = "localhost,127.0.0.1,backend,${data.terraform_remote_state.alb.outputs.lb_dns_name}" },
     ]
 
     secrets = [
       { name = "DB_USER", valueFrom = "${local.db_secret}:username::" },
-      { name = "DB_PASSWORD", valueFrom = "${local.db_secret}:password::"},
+      { name = "DB_PASSWORD", valueFrom = "${local.db_secret}:password::" },
     ]
 
     logConfiguration = {
       logDriver = "awslogs"
       options = {
-        awslogs-group = aws_cloudwatch_log_group.this.name
-        awslogs-region = data.aws_region.current.name
+        awslogs-group         = aws_cloudwatch_log_group.this.name
+        awslogs-region        = data.aws_region.current.name
         awslogs-stream-prefix = var.name
       }
     }
 
     healthCheck = {
-      command = ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')\" || exit 1"]
-      interval = 30
-      timeout = 5
-      retries = 3
+      command     = ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')\" || exit 1"]
+      interval    = 30
+      timeout     = 5
+      retries     = 3
       startPeriod = 60
     }
   }])
 }
 
 resource "aws_ecs_service" "this" {
-  name = var.name
-  cluster = data.terraform_remote_state.ecs_cluster.outputs.cluster_id
+  name            = var.name
+  cluster         = data.terraform_remote_state.ecs_cluster.outputs.cluster_id
   task_definition = aws_ecs_task_definition.this.arn
-  desired_count = var.desired_count
-  launch_type = "FARGATE"
+  desired_count   = var.desired_count
+  launch_type     = "FARGATE"
 
   network_configuration {
-    subnets = data.terraform_remote_state.vpc.outputs.private_subnet_ids
-    security_groups = [data.terraform_remote_state.backend_sg.outputs.sg_id]
+    subnets          = data.terraform_remote_state.vpc.outputs.private_subnet_ids
+    security_groups  = [data.terraform_remote_state.backend_sg.outputs.sg_id]
     assign_public_ip = false
   }
 
   service_connect_configuration {
-    enabled = true
+    enabled   = true
     namespace = data.terraform_remote_state.service_discovery.outputs.namespace_arn
 
     service {
-      port_name = var.container_name
+      port_name      = var.container_name
       discovery_name = "backend"
 
       client_alias {
-        port = var.backend_port
+        port     = var.backend_port
         dns_name = "backend"
       }
     }
   }
 
   deployment_circuit_breaker {
-    enable = true
+    enable   = true
     rollback = true
   }
 }
