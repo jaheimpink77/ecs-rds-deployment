@@ -4,7 +4,7 @@ set -euo pipefail
 ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 REGISTRY=$ACCOUNT_ID.dkr.ecr.eu-west-2.amazonaws.com
 TAG="${1:?usage: $0 <tag>, e.g. v0.1.0}"
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")") && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 aws ecr get-login-password --region eu-west-2 \
   | docker login --username AWS --password-stdin "$REGISTRY"
