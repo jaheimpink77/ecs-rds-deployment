@@ -4,9 +4,10 @@ set -euo pipefail
 APPLY_ORDER=(
     vpc ecr alb service-discovery frontend-sg backend-sg
     rds ecs-cluster ecs-backend ecs-frontend monitoring
+    budget
 )
 
-SKIP=(ecr)
+SKIP=(ecr budget)
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEV_DIR="$ROOT/dev"
