@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -6,21 +6,20 @@ DEV_DIR="$ROOT/terraform/dev"
 REGION="eu-west-2"
 
 APPLY_ORDER=(
-    vpc ecr alb service-discovery frontend-sg 
+    vpc ecr alb service-discovery frontend-sg
     backend-sg rds ecs-cluster ecs-backend
-    ecs-frontend monitoring budget 
-    )
+    ecs-frontend monitoring budget
+)
 
 NEEDS_TFVARS=(monitoring budget)
 
 REPOS=(ecs-rds-deployment-backend ecs-rds-deployment-frontend)
 
 for c in "${NEEDS_TFVARS[@]}"; do
-  if [[ ! -f "$DEV_DIR/$c/terrafrom.tfvars" ]]; then
-    echo "Missing $DEV_DIR/$c/terrafrom.tfvars" >&2
+  if [[ ! -f "$DEV_DIR/$c/terraform.tfvars" ]]; then
+    echo "Missing $DEV_DIR/$c/terraform.tfvars" >&2
     exit 1
   fi
-
 done
 
 ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
@@ -53,7 +52,7 @@ for component in "${APPLY_ORDER[@]}"; do
   if [[ "$component" == "ecs-backend" ]]; then
     require_images
   fi
-  echo "==> [$1/$total] applying $component"
+  echo "==> [$i/$total] applying $component"
   terraform -chdir="$DEV_DIR/$component" init -input=false -reconfigure
   terraform -chdir="$DEV_DIR/$component" apply -input=false -auto-approve
 done
