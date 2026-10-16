@@ -2,9 +2,9 @@
 set -euo pipefail
 
 APPLY_ORDER=(
-    vpc ecr alb service-discovery frontend-sg backend-sg
-    rds ecs-cluster ecs-backend ecs-frontend monitoring
-    budget
+    vpc ecr github-oidc alb service-discovery frontend-sg
+    backend-sg rds ecs-cluster ecs-backend ecs-frontend
+    monitoring budget
 )
 
 SKIP=(ecr budget)
