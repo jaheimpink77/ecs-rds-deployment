@@ -7,7 +7,7 @@ APPLY_ORDER=(
     monitoring budget
 )
 
-SKIP=(ecr budget)
+SKIP=(ecr budget github-oidc)
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEV_DIR="$ROOT/dev"
@@ -16,6 +16,8 @@ ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 echo "About to destroy ALL components in account $ACCOUNT_ID (eu-west-2)."
 read -r -p "Type the account ID to confirm: " REPLY
 [[ "$REPLY" == "$ACCOUNT_ID" ]] || { echo "Aborted."; exit 1; }
+
+export TF_VAR_image_tag="destroy"
 
 for (( i=${#APPLY_ORDER[@]}-1; i>=0; i-- )); do
   component="${APPLY_ORDER[$i]}"

@@ -5,7 +5,7 @@ on:
     branches: [master]
   workflow_dispatch:
 
-concurreny:
+concurrecy:
   group: build-push-${{ github.ref }}
   cancel-in-progress: false
 
@@ -41,10 +41,10 @@ jobs:
         id: exists
         run: |
           rc=0
-          out"$(aws ecr describe-images \
+          out="$(aws ecr describe-images \
             --repository-name "ecs-rds-deployment-${{ matrix.service }}" \
-            --images-ids imageTag="${{ github.sha }}" 2>&1)" || rc=$?
-          if [ "$rc" -eq 0]; then
+            --image-ids imageTag="${{ github.sha }}" 2>&1)" || rc=$?
+          if [ "$rc" -eq 0 ]; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
             echo "Tag already in ECR, skipping build."
           elif grep -q ImageNotFoundException <<< "$out"; then
