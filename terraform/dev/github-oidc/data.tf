@@ -3,7 +3,7 @@ data "terraform_remote_state" "ecr" {
 
   config = {
     bucket = "ecs-rds-deployment-remote-state-210450948513-eu-west-2-an"
-    key = "dev/ecr"
+    key    = "dev/ecr"
     region = "eu-west-2"
   }
 }

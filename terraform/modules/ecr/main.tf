@@ -12,10 +12,10 @@ resource "aws_ecr_lifecycle_policy" "this" {
   policy = jsonencode({
     rules = [{
       rulePriority = 1
-      description = "Keep the most recent ${var.max_image_count} images"
+      description  = "Keep the most recent ${var.max_image_count} images"
       selection = {
-        tagStatus = "any"
-        countType = "imageCountMoreThan"
+        tagStatus   = "any"
+        countType   = "imageCountMoreThan"
         countNumber = var.max_image_count
       }
       action = {

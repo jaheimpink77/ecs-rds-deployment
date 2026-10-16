@@ -14,6 +14,6 @@ variable "scan_on_push" {
 
 variable "max_image_count" {
   description = "The max amount of images to keep in the ecr repository"
-  type = number
-  default = 20
+  type        = number
+  default     = 20
 }
