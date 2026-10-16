@@ -5,7 +5,7 @@ on:
     branches: [master]
   workflow_dispatch:
 
-concurrecy:
+concurrency:
   group: build-push-${{ github.ref }}
   cancel-in-progress: false
 
