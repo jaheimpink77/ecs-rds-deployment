@@ -37,13 +37,13 @@ if [[ "$CONFIRM" != "$ACCOUNT_ID" ]]; then
 fi
 
 require_images() {
-    local repo count
+    local repo
     for repo in "${REPOS[@]}"; do
       if ! aws ecr describe-images \
           --repository-name "$repo" \
           --region "$REGION" \
           --image-ids imageTag="$TAG" >/dev/null; then
-        echo "ECR repo $repo has no image tagged $TAG (CI pushes it on merge to master)."
+        echo "ECR repo $repo has no image tagged $TAG (CI pushes it on merge to master)." >&2
         exit 1
       fi
     done
