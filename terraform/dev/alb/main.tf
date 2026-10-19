@@ -18,8 +18,7 @@ module "alb" {
   https_egress_to_port        = 443
   http_egress_from_port       = 8080
   http_egress_to_port         = 8080
-  https_ingress_description 
-  = "Ingress rules for HTTPS"
+  https_ingress_description = "Ingress rules for HTTPS"
   https_egress_description    = "Egress rules for HTTPS"
   http_ingress_description    = "Ingress rules for HTTP"
   http_egress_description     = "Egress rules for HTTP"
