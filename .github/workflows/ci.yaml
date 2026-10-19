@@ -148,4 +148,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: shellcheck terraform/*.sh backend/entrypoint.sh
-                
+
+  ci-ok:
+    if: always()
+    needs: [terraform-fmt, terraform-validate, backend, frontend, docker-build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail of any required job failed or was cancelled
+        run: |
+          if [ "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}" = "true"]; then
+            echo "A required job did not succeed" >&2
+            exit 1
+          fi
