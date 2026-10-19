@@ -4,9 +4,8 @@ variable "name" {
 }
 
 variable "github_repo" {
-  description = "The github repo that can use the OIDC provider"
+  description = "The github repo identifier as it appears in the OIDC sub cliam. including the owner and repo IDs"
   type        = string
-  default     = "jaheimpink77/ecs-rds-deployment"
 }
 
 variable "allowed_ref" {
