@@ -77,10 +77,12 @@ require_images() {
 total=${#PLAN[@]}
 i=0
 export TF_VAR_image_tag="$TAG"
+images_checked=false
 for component in "${PLAN[@]}"; do
   i=$((i + 1))
-  if [[ "$component" == "ecs-backend" ]]; then
+  if [[ "$images_checked" == false ]] && has "$component" "ecs-backend ecs-frontend"; then
     require_images
+    images_checked=true
   fi
   echo "==> [$i/$total] applying $component"
   terraform -chdir="$DEV_DIR/$component" init -input=false -reconfigure
