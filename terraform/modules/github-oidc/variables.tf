@@ -4,7 +4,7 @@ variable "name" {
 }
 
 variable "github_repo" {
-  description = "The github repo identifier as it appears in the OIDC sub cliam. including the owner and repo IDs"
+  description = "The github repo identifier as it appears in the OIDC sub claim. including the owner and repo IDs"
   type        = string
 }
 
@@ -30,7 +30,7 @@ variable "cluster_name" {
 }
 
 variable "service_names" {
-  description = "ECS service names (also task definition families and role name prefix)"
+  description = "ECS services names (also task definition families and role name prefix)"
   type        = list(string)
 }
 
