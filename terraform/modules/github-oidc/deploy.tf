@@ -153,6 +153,11 @@ resource "aws_iam_role" "deploy_full" {
   assume_role_policy = data.aws_iam_policy_document.deploy_full_assume_role.json
 }
 
+resource "aws_iam_role_policy_attachment" "deploy_full_power_user" {
+  role = aws_iam_role.deploy_full.name
+  policy_arn = "arn:aws:iam::aws:policy/PowerUserAccess"
+}
+
 data "aws_iam_policy_document" "deploy_full_iam" {
   statement {
     actions = [
