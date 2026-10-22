@@ -50,6 +50,12 @@ jobs:
       - name: Lint
         run: tflint --recursive --config "$GITHUB_WORKSPACE/.tflint.hcl" --format compact
 
+  actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker://rhsyd/actionlint:1.7.7
+
   trivy-scan:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -151,7 +157,7 @@ jobs:
 
   ci-ok:
     if: always()
-    needs: [terraform-fmt, terraform-validate, backend, frontend, docker-build]
+    needs: [terraform-fmt, terraform-validate, actionlint, backend, frontend, docker-build]
     runs-on: ubuntu-latest
     steps:
       - name: Fail of any required job failed or was cancelled
