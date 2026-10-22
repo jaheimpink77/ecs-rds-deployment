@@ -4,23 +4,23 @@ on:
   workflow_dispatch:
     inputs:
       scope:
-        desctiption: "app = ECS services only; full = everything except ecr and github-oidc"
+        description: "app = ECS services only; full = everything except ecr and github-oidc"
         type: choice
         options: [app, full]
         default: app
       image_tag:
-        description: "Commit SHA to deploy (blank = HEAD of the rbanch you run from)"
+        description: "Commit SHA to deploy (blank = HEAD of the branch you run from)"
         required: false
-concurreny:
+concurrency:
   group: deploy
   cancel-in-progress: false
 
-permisions:
+permissions:
   id-token: write
   contents: read
 
 env:
-  AWS-REGION: eu-west-2
+  AWS_REGION: eu-west-2
   CLUSTER: ecs-rds-deployment
   TF_VAR_image_tag: ${{ inputs.image_tag || github.sha }}
 
@@ -30,7 +30,7 @@ jobs:
     environment: ${{ inputs.scope == 'full' && 'dev-full' || 'dev-app' }}
     env:
       TF_VAR_alert_email: ${{ secrets.ALERT_EMAIL }}
-      TF_VAR_limit_amount: ${{ vars.BUDGET_EMAIL }}
+      TF_VAR_limit_amount: ${{ vars.BUDGET_LIMIT }}
     steps:
       - uses: actions/checkout@v4
 
@@ -51,11 +51,11 @@ jobs:
           for repo in ecs-rds-deployment-backend ecs-rds-deployment-frontend; do
             if ! aws ecr describe-images \
                 --repository-name "$repo" \
-                --image-ids imageTag="TF_VAR_image_tag" >/dev/null; then
+                --image-ids imageTag="$TF_VAR_image_tag" >/dev/null; then
               echo "ECR repo $repo has no image tagged $TF_VAR_image_tag" >&2
               exit 1
             fi
-           done
+          done
 
       - uses: hashicorp/setup-terraform@v3
         with:
@@ -79,7 +79,7 @@ jobs:
       - name: Confirm the new image is actually the one running
         run: |
           for svc in ecs-rds-deployment-backend ecs-rds-deployment-frontend; do
-            td="$(aws ecs describe-services --cluster "$CLUSTER" --services "$svc") \
+            td="$(aws ecs describe-services --cluster "$CLUSTER" --services "$svc" \
               --query "services[0].deployments[?status=='PRIMARY'].taskDefinition | [0]" --output text)"
             img="$(aws ecs describe-task-definition --task-definition "$td" \
               --query 'taskDefinition.containerDefinitions[0].image' --output text)"
