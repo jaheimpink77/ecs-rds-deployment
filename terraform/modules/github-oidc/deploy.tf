@@ -154,7 +154,7 @@ resource "aws_iam_role" "deploy_full" {
 }
 
 resource "aws_iam_role_policy_attachment" "deploy_full_power_user" {
-  role = aws_iam_role.deploy_full.name
+  role       = aws_iam_role.deploy_full.name
   policy_arn = "arn:aws:iam::aws:policy/PowerUserAccess"
 }
 
