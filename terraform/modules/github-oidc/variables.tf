@@ -18,3 +18,35 @@ variable "ecr_repository_arns" {
   description = "The ECR repository arns that the role can perform actions against"
   type        = list(string)
 }
+
+variable "state_bucket" {
+  description = "Name of the S3 bucket holding Terraform state"
+  type        = string
+}
+
+variable "cluster_name" {
+  description = "ECS cluster the app deploy role may update service in"
+  type        = string
+}
+
+variable "service_names" {
+  description = "ECS service names (also task definition families and role name prefix)"
+  type        = list(string)
+}
+
+variable "app_state_keys" {
+  description = "State keys the app deploy role may write, e.g. dev/ecs-backend"
+  type        = list(string)
+}
+
+variable "app_environment" {
+  description = "GitHub Environment whose jobs may assume the app deploy role"
+  type        = string
+  default     = "dev-app"
+}
+
+variable "full_environment" {
+  description = "GitHub Environment whose jobs may assume the full deploy role"
+  type        = string
+  default     = "dev-full"
+}
