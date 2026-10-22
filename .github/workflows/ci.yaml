@@ -26,7 +26,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        component: [vpc, ecr, alb, service-discovery, frontend-sg, backend-sg, rds, ecs-cluster, ecs-backend, ecs-frontend, monitoring, budget]
+        component: [vpc, ecr, github-oidc, alb, service-discovery, frontend-sg, backend-sg, rds, ecs-cluster, ecs-backend, ecs-frontend, monitoring, budget]
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
