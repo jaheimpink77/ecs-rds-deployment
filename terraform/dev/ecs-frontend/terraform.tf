@@ -6,12 +6,13 @@ terraform {
     }
   }
 
-  required_version = ">= 1.2"
+  required_version = ">= 1.11"
 
   backend "s3" {
-    bucket = "ecs-rds-deployment-remote-state-210450948513-eu-west-2-an"
-    key    = "dev/ecs-frontend"
-    region = "eu-west-2"
+    bucket       = "ecs-rds-deployment-remote-state-210450948513-eu-west-2-an"
+    key          = "dev/ecs-frontend"
+    region       = "eu-west-2"
+    use_lockfile = true
   }
 }
 

@@ -19,21 +19,46 @@ APPLY_ORDER=(
 
 NEEDS_TFVARS=(monitoring budget)
 
+CI_MODE="${CI:-}"
+SKIP=()
+if [[ "$CI_MODE" == "true" ]]; then
+  SKIP=(ecr github-oidc)
+fi
+
+has() { [[ " $2 " == *" $1 "* ]]; }
+PLAN=()
+for c in "${APPLY_ORDER[@]}"; do
+  if has "$c" "${SKIP[*]:-}"; then continue; fi
+  if [[ -n "${ONLY:-}" ]] && ! has "$c" "$ONLY"; then continue; fi
+  PLAN+=("$c")
+done
+if [[ ${#PLAN[@]} -eq 0 ]]; then
+  echo "Nothing to apply (ONLY='${ONLY:-}')" >&2
+  exit 1
+fi
+
 REPOS=(ecs-rds-deployment-backend ecs-rds-deployment-frontend)
 
 for c in "${NEEDS_TFVARS[@]}"; do
-  if [[ ! -f "$DEV_DIR/$c/terraform.tfvars" ]]; then
+  has "$c" "${PLAN[*]}" || continue
+  if [[ "$CI_MODE" == "true" ]]; then
+    : "${TF_VAR_alert_email:?TF_VAR_alert_email must be set to apply $c}"
+    if [[ "$c" == "budget" ]]; then
+      : "${TF_VAR_limit_amount:?TF_VAR_limit_amount must be set to apply budget}"
+    fi
+  elif [[ ! -f "$DEV_DIR/$c/terraform.tfvars" ]]; then
     echo "Missing $DEV_DIR/$c/terraform.tfvars" >&2
     exit 1
   fi
 done
 
 ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
-echo "About to apply ALL components in account $ACCOUNT_ID ($REGION), image tag $TAG."
-read -r -p "Type the account ID to continue: " CONFIRM
-if [[ "$CONFIRM" != "$ACCOUNT_ID" ]]; then
-  echo "Aborted."
-  exit 1
+if [[ "$CI_MODE" == "true" ]]; then
+  echo "CI mode: applying ${PLAN[*]} in account $ACCOUNT_ID, image tag $TAG"
+else
+  echo "About to apply ${PLAN[*]} in account $ACCOUNT_ID ($REGION), image tag $TAG."
+  read -r -p "Type the account ID to continue: " CONFIRM
+  [[ "$CONFIRM" == "$ACCOUNT_ID" ]] || { echo "Aborted."; exit 1; }
 fi
 
 require_images() {
@@ -49,13 +74,15 @@ require_images() {
     done
 }
 
-total=${#APPLY_ORDER[@]}
+total=${#PLAN[@]}
 i=0
 export TF_VAR_image_tag="$TAG"
-for component in "${APPLY_ORDER[@]}"; do
+images_checked=false
+for component in "${PLAN[@]}"; do
   i=$((i + 1))
-  if [[ "$component" == "ecs-backend" ]]; then
+  if [[ "$images_checked" == false ]] && has "$component" "ecs-backend ecs-frontend"; then
     require_images
+    images_checked=true
   fi
   echo "==> [$i/$total] applying $component"
   terraform -chdir="$DEV_DIR/$component" init -input=false -reconfigure
