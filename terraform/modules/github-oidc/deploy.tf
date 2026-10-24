@@ -5,8 +5,13 @@ locals {
   account_id = data.aws_caller_identity.current.account_id
   region     = data.aws_region.current.name
 
-  service_arns   = [for s in var.service_names : "arn:aws:ecs:${local.region}:${local.account_id}:service/${var.cluster_name}/${s}"]
-  log_group_arns = [for s in var.service_names : "arn:aws:logs:${local.region}:${local.account_id}:log-group:/ecs/${s}:*"]
+  service_arns = [for s in var.service_names : "arn:aws:ecs:${local.region}:${local.account_id}:service/${var.cluster_name}/${s}"]
+  log_group_arns = flatten([
+    for s in var.service_names : [
+      "arn:aws:logs:${local.region}:${local.account_id}:log-group:/ecs/${s}:*",
+      "arn:aws:logs:${local.region}:${local.account_id}:log-group:/ecs/${s}",
+    ]
+  ])
   role_arns      = [for s in var.service_names : "arn:aws:iam::${local.account_id}:role/${s}-*"]
   state_key_arns = [for k in var.app_state_keys : "arn:aws:s3:::${var.state_bucket}/${k}"]
   lock_key_arns  = [for k in local.state_key_arns : "${k}.tflock"]
