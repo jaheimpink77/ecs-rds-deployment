@@ -23,10 +23,6 @@ resource "aws_ecs_task_definition" "this" {
       protocol      = "tcp"
     }]
 
-    environment = [
-      { name = "BACKEND_URL", value = "http://backend:${var.backend_port}" },
-    ]
-
     logConfiguration = {
       logDriver = "awslogs"
       options = {
