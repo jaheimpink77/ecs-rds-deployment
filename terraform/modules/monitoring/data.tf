@@ -49,5 +49,3 @@ data "terraform_remote_state" "ecs_frontend" {
 }
 
 data "aws_region" "current" {}
-
-data "aws_caller_identity" "current" {}

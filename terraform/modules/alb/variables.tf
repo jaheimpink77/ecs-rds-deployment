@@ -1,11 +1,3 @@
-## data.tf variables
-
-variable "vpc_name" {
-  description = "Name of the VPC"
-  type        = string
-}
-
-## main.tf variables
 variable "lb_name" {
   description = "Name of the load balancer"
   type        = string

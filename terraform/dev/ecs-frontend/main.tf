@@ -4,7 +4,6 @@ module "ecs_frontend" {
   name                              = "ecs-rds-deployment-frontend"
   container_name                    = "frontend"
   frontend_port                     = 8080
-  backend_port                      = 8000
   image_tag                         = var.image_tag
   cpu                               = 256
   memory                            = 512
