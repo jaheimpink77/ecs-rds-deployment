@@ -157,7 +157,7 @@ jobs:
 
   ci-ok:
     if: always()
-    needs: [terraform-fmt, terraform-validate, actionlint, backend, frontend, docker-build]
+    needs: [terraform-fmt, terraform-validate, tflint, actionlint, backend, frontend, docker-build]
     runs-on: ubuntu-latest
     steps:
       - name: Fail of any required job failed or was cancelled
