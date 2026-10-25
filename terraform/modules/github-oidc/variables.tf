@@ -53,6 +53,6 @@ variable "full_environment" {
 
 variable "destroy_environment" {
   description = "GitHub Environment whose jobs may also assume the full deploy role, for teardown"
-  type = string
-  default = "dev-destroy"
+  type        = string
+  default     = "dev-destroy"
 }
