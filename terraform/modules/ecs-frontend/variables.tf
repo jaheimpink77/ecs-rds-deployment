@@ -13,11 +13,6 @@ variable "frontend_port" {
   type        = number
 }
 
-variable "backend_port" {
-  description = "Number of the backend container port"
-  type        = number
-}
-
 variable "image_tag" {
   description = "Image tag of the frontend container image"
   type        = string

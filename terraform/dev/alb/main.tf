@@ -1,7 +1,6 @@
 module "alb" {
   source = "../../modules/alb"
 
-  vpc_name                    = "ecs-rds-deployment"
   lb_name                     = "ecs-rds-deployment-lb"
   internal                    = false
   load_balancer_type          = "application"
