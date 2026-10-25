@@ -1,0 +1,51 @@
+name: Destroy
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type the AWS account ID to confirm. This DELETES the dev stack, including the RDS data"
+        required: true
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: read 
+
+env:
+  AWS_REGION: eu-west-2
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+    environment: dev-destroy
+    env:
+      TF_VAR_alert_email: ${{ secrets.ALERT_EMAIL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+      
+      - name: Check the typed account ID
+        env:
+          CONFIRM: ${{ inputs.confirm }}
+        run: |
+          account_id="$(aws sts get-caller-identity --query Account --output text)"
+          if [[ "$CONFIRM" != "$account_id" ]]; then
+            echo "confirm does not match the AWS account ID" >&2
+            exit 1
+          fi
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terrafrom_wrapper: false
+
+      - name: Destroy
+        run: ./terraform/destroy-resources.sh
+      

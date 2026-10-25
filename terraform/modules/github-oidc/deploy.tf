@@ -148,7 +148,7 @@ data "aws_iam_policy_document" "deploy_full_assume_role" {
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:${var.github_repo}:environment:${var.full_environment}"]
+      values   = [for e in [var.full_environment, var.destroy_environment] : "repo:${var.github_repo}:environment:${e}"]
     }
   }
 }
