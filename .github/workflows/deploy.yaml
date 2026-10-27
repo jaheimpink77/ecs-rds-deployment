@@ -88,3 +88,9 @@ jobs:
               exit 1
             fi
           done
+
+      - name: Smoke test through the load balancer
+        run: |
+          terraform -chdir=terraform/dev/alb init -input=false
+          lb="$(terraform -chdir=terraform/dev/alb output -raw lb_dns_name)"
+          ./smoke-test.sh "http://$lb"
