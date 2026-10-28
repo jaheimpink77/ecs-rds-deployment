@@ -104,7 +104,7 @@ class UserViewTestCase(APITestCase):
                 'username': 'newname',
                 'email': 'update@example.com',
                 'bio': 'Updated bio',
-                'image': 'http;//example.com/updated-image.jpg',
+                'image': 'http://example.com/updated-image.jpg',
                 'password': 'newpassword123',
             }
         }
