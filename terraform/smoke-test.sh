@@ -31,7 +31,7 @@ bundles="$(grep -oE '/assets/[^"]+\.js' "$TMP" | sort -u || true)"
 while IFS= read -r bundle; do
   curl -fsS --max-time 30 -o "$TMP" "$BASE$bundle" || fail "could not fetch $bundle"
   if grep -q 'api\.realworld\.io' "$TMP"; then
-    fail "$bundle contains the demp API address (was VITE_API_URL set at build time?)"
+    fail "$bundle contains the demo API address (was VITE_API_URL set at build time?)"
   fi
 done <<< "$bundles"
 pass "bundle does not point at the demo API"
