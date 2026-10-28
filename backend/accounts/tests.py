@@ -102,7 +102,7 @@ class UserViewTestCase(APITestCase):
         user_data = {
             'user': {
                 'username': 'newname',
-                'email': 'update@example.com',
+                'email': 'updated@example.com',
                 'bio': 'Updated bio',
                 'image': 'http://example.com/updated-image.jpg',
                 'password': 'newpassword123',
