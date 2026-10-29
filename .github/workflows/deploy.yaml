@@ -93,4 +93,4 @@ jobs:
         run: |
           terraform -chdir=terraform/dev/alb init -input=false
           lb="$(terraform -chdir=terraform/dev/alb output -raw lb_dns_name)"
-          ./smoke-test.sh "http://$lb"
+          ./terraform/smoke-test.sh "http://$lb"
