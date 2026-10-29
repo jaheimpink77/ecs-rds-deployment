@@ -49,7 +49,7 @@ pass "signup returned 201 and a token"
 status="$(curl -sS --max-time 20 -o "$TMP" -w '%{http_code}' \
   "$BASE/api/user" -H "Authorization: Token $token")"
 [[ "$status" == "200" ]] || fail "GET /api/user returned HTTP $status: $(cat "TMP")"
-jq -e --arg e "$email" '.email == $e' "$TMP" >/dev/null \
+jq -e --arg e "$email" '.user.email == $e' "$TMP" >/dev/null \
   || fail "/api/user did not return $email. Body; $(cat "$TMP")"
 pass "authenticated read returned the new user"
 

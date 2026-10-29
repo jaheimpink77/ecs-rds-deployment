@@ -90,26 +90,47 @@ class UserViewTestCase(APITestCase):
         
 
     def test_user_view_get(self):
-        
         response = self.client.get(self.url)
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)  
+        self.assertEqual(response.data['user']['email'], self.email)
+        self.assertEqual(response.data['user']['username'], self.username)
+        self.assertNotIn('password', response.data['user'])
         
         
     def test_user_view_put(self):
-        updated_email = 'updated@example.com'
-        updated_bio = 'Updated bio'
-        updated_image = 'http://example.com/updated-image.jpg'
         user_data = {
             'user': {
-                'email': updated_email,
-                'bio': updated_bio,
-                'image': updated_image,
+                'username': 'newname',
+                'email': 'updated@example.com',
+                'bio': 'Updated bio',
+                'image': 'http://example.com/updated-image.jpg',
+                'password': 'newpassword123',
             }
         }
 
         response = self.client.put(self.url, user_data, format='json')
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)  
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['user']['username'], 'newname')  
+        self.assertEqual(response.data['user']['email'], 'updated@example.com')
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.bio, 'Updated bio')
+        self.assertTrue(self.user.check_password('newpassword123'))
+
+    def test_user_view_put_partial(self):
+        response = self.client.put(self.url, {'user': {'bio': 'only bio'}}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['user']['bio'], 'only bio')
+        self.assertEqual(response.data['user']['email'], self.email)
+
+    def test_user_view_put_blank_password_keeps_password(self):
+        response = self.client.put(self.url, {'user': {'bio': 'x', 'password': ''}}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password(self.password))
         
         
 class ProfileDetailViewTestCase(APITestCase):

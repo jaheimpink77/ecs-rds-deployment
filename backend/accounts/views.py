@@ -49,22 +49,19 @@ class UserView(views.APIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request, format=None):
-        user = self.request.user
-        serializer = UserSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer = UserSerializer(request.user)
+        return Response({"user": serializer.data}, status=status.HTTP_200_OK)
     
     def put(self, request, format=None, pk=None):
-        user = self.request.user
-        user_data = request.data.get('user')
+        user_data = dict(request.data.get('user') or {})
+        if not user_data.get('password'):
+            user_data.pop('password', None)
         
-        user.email = user_data['email'] 
-        user.bio = user_data['bio']
-        user.image = user_data['image']
-        user.save()
+        serializer = UserSerializer(request.user, data=user_data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
         
-        serializer = UserSerializer(user)
-        
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"user": UserSerializer(user).data}, status=status.HTTP_200_OK)
 
 
 class ProfileDetailView(viewsets.ModelViewSet):
