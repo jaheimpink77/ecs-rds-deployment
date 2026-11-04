@@ -12,7 +12,7 @@ function Settings() {
   } = useUserQuery()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
-  const { logout } = useAuth()
+  const { authUser, login, logout } = useAuth()
 
   async function onSubmit(values, { setErrors }) {
     try {
@@ -20,7 +20,9 @@ function Settings() {
 
       const updatedUsername = data?.user?.username
 
-      logout(data?.user)
+      if (data?.user) {
+        login({ ...authUser, ...data.user })
+      }
 
       queryClient.invalidateQueries(`/profiles/${updatedUsername}`)
       queryClient.invalidateQueries(`/user`)
