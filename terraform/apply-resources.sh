@@ -12,9 +12,9 @@ if [[ -z "$TAG" ]]; then
 fi
 
 APPLY_ORDER=(
-    vpc ecr github-oidc alb service-discovery frontend-sg
-    backend-sg rds ecs-cluster ecs-backend ecs-frontend
-    monitoring budget
+    vpc ecr github-oidc alb cloudfront service-discovery
+    frontend-sg backend-sg rds ecs-cluster ecs-backend 
+    ecs-frontend monitoring budget
 )
 
 NEEDS_TFVARS=(monitoring budget)
