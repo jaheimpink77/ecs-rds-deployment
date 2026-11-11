@@ -13,7 +13,7 @@ fi
 
 APPLY_ORDER=(
     vpc ecr github-oidc alb cloudfront service-discovery
-    frontend-sg backend-sg rds ecs-cluster ecs-backend 
+    frontend-sg backend-sg rds ecs-cluster ecs-backend
     ecs-frontend monitoring budget
 )
 

@@ -3,7 +3,7 @@ data "terraform_remote_state" "alb" {
 
   config = {
     bucket = "ecs-rds-deployment-remote-state-210450948513-eu-west-2-an"
-    key    = "dev/alb/terraform.tfstate"
+    key    = "dev/alb"
     region = "eu-west-2"
   }
 }
