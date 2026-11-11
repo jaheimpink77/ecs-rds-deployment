@@ -61,4 +61,14 @@ data "terraform_remote_state" "service_discovery" {
   }
 }
 
+data "terraform_remote_state" "cloudfront" {
+  backend = "s3"
+
+  config = {
+    bucket = "ecs-rds-deployment-remote-state-210450948513-eu-west-2-an"
+    key    = "dev/cloudfront"
+    region = "eu-west-2"
+  }
+}
+
 data "aws_region" "current" {}
