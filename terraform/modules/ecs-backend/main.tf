@@ -26,7 +26,7 @@ resource "aws_ecs_task_definition" "this" {
     environment = [
       { name = "DB_HOST", value = data.terraform_remote_state.rds.outputs.endpoint },
       { name = "DB_NAME", value = data.terraform_remote_state.rds.outputs.db_name },
-      { name = "ALLOWED_HOSTS", value = "localhost,127.0.0.1,backend,${data.terraform_remote_state.alb.outputs.lb_dns_name}" },
+      { name = "ALLOWED_HOSTS", value = "localhost,127.0.0.1,backend,${data.terraform_remote_state.alb.outputs.lb_dns_name},${data.terraform_remote_state.cloudfront.outputs.domain_name}" },
     ]
 
     secrets = [
