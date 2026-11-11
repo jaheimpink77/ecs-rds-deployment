@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-BASE="${1:?usage: $0 <base-url, e.g. http://my-alb.eu-west-2.elb.amazonaws.com>}"
+BASE="${1:?usage: $0 <base-url, e.g. https://dxxxx.cloudfront.net>}"
 BASE="${BASE%/}"
 RETRIES="${SMOKE_RETRIES:-30}"
 UNIQUE="smoke-${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-0}-${RANDOM}"
